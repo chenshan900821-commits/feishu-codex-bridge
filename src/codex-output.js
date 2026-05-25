@@ -57,7 +57,7 @@ function formatCodexFailure({ errorText, stderr, code, signal, lastEventType }) 
     details,
     suffix.trim(),
     '',
-    '可以直接重发问题；如果你刚让它处理图片，建议先让它只输出文字，或换一张正常的 PNG/JPG 再试。',
+    '可以直接重发问题；如果连续出现，发送 /new 开新上下文。刚让它处理图片时，建议先让它只输出文字，或换一张正常的 PNG/JPG 再试。',
   ]
     .filter(Boolean)
     .join('\n');

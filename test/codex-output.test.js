@@ -45,5 +45,6 @@ test('formatCodexFailure humanizes invalid image errors', () => {
 
   assert.match(message, /Codex 这轮没有生成正常回答/);
   assert.match(message, /检测到无效图片/);
+  assert.match(message, /\/new/);
   assert.doesNotMatch(message, /codex_core_skills/);
 });
