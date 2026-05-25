@@ -7,6 +7,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const Lark = require('@larksuiteoapi/node-sdk');
+const {
+  extractCodexErrorText,
+  formatCodexFailure,
+  sanitizeCodexStderr,
+} = require('./codex-output');
 
 let pty = null;
 try {
@@ -635,7 +640,7 @@ class ExecCodexSession {
     }
 
     if (code !== 0 || signal) {
-      const detail = stderr.trim() || `exit=${code}, signal=${signal || ''}`;
+      const detail = sanitizeCodexStderr(stderr) || `exit=${code}, signal=${signal || ''}`;
       await sendText(this.chatId, `Codex 进程异常结束：\n${normalizeTerminalOutput(detail).trim()}`);
     }
   }
@@ -682,6 +687,7 @@ class ExecCodexSessionV2 {
     this.streamRemainder = '';
     this.sentAgentTexts = new Set();
     this.lastEventType = '';
+    this.errorMessages = [];
     this.imageBaseline = new Map();
     this.sentImages = new Set();
     this.stopped = false;
@@ -748,6 +754,7 @@ class ExecCodexSessionV2 {
     this.sentImages.clear();
     this.imageBaseline = snapshotImages(this.cwd);
     this.lastEventType = 'started';
+    this.errorMessages = [];
 
     let stdout = '';
     let stderr = '';
@@ -787,8 +794,17 @@ class ExecCodexSessionV2 {
     await this.sendGeneratedImages();
 
     if (code !== 0 || signal) {
-      const detail = stderr.trim() || `exit=${code}, signal=${signal || ''}`;
-      await sendText(this.chatId, `Codex process ended abnormally:\n${normalizeTerminalOutput(detail).trim()}`);
+      const errorText = this.errorMessages.find(Boolean) || '';
+      await sendText(
+        this.chatId,
+        formatCodexFailure({
+          errorText,
+          stderr,
+          code,
+          signal,
+          lastEventType: this.lastEventType,
+        }),
+      );
     } else if (!finalText.trim() && !this.sentAgentTexts.size) {
       await sendText(this.chatId, `Codex finished with no final text. Last event: ${this.lastEventType || 'unknown'}`);
     }
@@ -862,6 +878,12 @@ class ExecCodexSessionV2 {
     this.lastEventType = event.type || this.lastEventType;
     const item = event.item || {};
     log('info', `codex event type=${event.type || ''}, item=${item.type || ''}`);
+    if (event.type === 'error' || event.type === 'turn.failed') {
+      const errorText = extractCodexErrorText(event);
+      if (errorText) {
+        this.errorMessages.push(errorText);
+      }
+    }
     const discoveredSessionId = extractSessionIdFromEvent(event);
     if (discoveredSessionId) {
       this.setSessionId(discoveredSessionId);
