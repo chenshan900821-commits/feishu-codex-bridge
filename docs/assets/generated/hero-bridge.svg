@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">飞书里唤醒 Codex</title>
+  <desc id="desc">A clean hand-drawn infographic showing Feishu messages flowing through a local bridge to Codex CLI, then returning rich text and generated images.</desc>
+  <defs>
+    <pattern id="paper" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="9" r="1.4" fill="#e7d9bd" opacity=".48"/>
+      <circle cx="29" cy="26" r="1" fill="#cfe5df" opacity=".55"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="7" flood-color="#6c5a3d" flood-opacity=".14"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Q4 6 1 1" fill="#4ca6ca" stroke="#28231f" stroke-width="1.25"/>
+    </marker>
+    <linearGradient id="bot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <style>
+      .title { font:900 64px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; letter-spacing:0; }
+      .subtitle { font:500 25px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; fill:#544c43; }
+      .step { font:900 24px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; fill:#2b2722; }
+      .body { font:600 19px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; fill:#575047; }
+      .small { font:600 16px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; fill:#756b5f; }
+      .code { font:700 17px "Cascadia Mono",Consolas,monospace; fill:#263246; }
+      .outline { stroke:#2b2722; stroke-width:3.4; stroke-linecap:round; stroke-linejoin:round; }
+      .thin { stroke:#2b2722; stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#fbf1dc"/>
+  <rect width="1600" height="900" fill="url(#paper)"/>
+  <path d="M42 40 H1558 V858 Q1402 876 1234 860 Q1020 838 805 864 Q558 892 332 862 Q174 842 42 864 Z" fill="none" stroke="#ddcda9" stroke-width="5"/>
+
+  <g transform="translate(108 82)">
+    <text class="title">
+      <tspan fill="#ff6b6b">飞书</tspan>
+      <tspan fill="#ffd166">里</tspan>
+      <tspan fill="#55c987">唤醒</tspan>
+      <tspan fill="#4d96ff"> Codex</tspan>
+    </text>
+    <text class="subtitle" x="4" y="58">一个本地 bridge，把群聊里的自然语言变成项目操作、上下文续接和图片回传。</text>
+  </g>
+
+  <g opacity=".96">
+    <path d="M90 180 l20 9 18-9 -7 21 15 15 -22 2 -12 20 -8-22 -22-6 18-13z" fill="#ffe880" stroke="#2b2722" stroke-width="3"/>
+    <path d="M1440 126 l18 8 17-9 -5 19 15 13 -20 3 -9 18 -9-18 -20-3 15-13z" fill="#a7f3d0" stroke="#2b2722" stroke-width="3"/>
+    <circle cx="138" cy="760" r="13" fill="#b7e4ff" stroke="#2b2722" stroke-width="3"/>
+    <circle cx="1464" cy="732" r="12" fill="#ffc6ff" stroke="#2b2722" stroke-width="3"/>
+  </g>
+
+  <path d="M396 390 C426 360 451 348 482 348" fill="none" stroke="#4ca6ca" stroke-width="5.5" marker-end="url(#arrow)"/>
+  <path d="M766 390 C796 360 821 348 852 348" fill="none" stroke="#4ca6ca" stroke-width="5.5" marker-end="url(#arrow)"/>
+  <path d="M1136 390 C1166 360 1191 348 1222 348" fill="none" stroke="#4ca6ca" stroke-width="5.5" marker-end="url(#arrow)"/>
+  <path d="M1266 624 C1096 742 706 758 344 644" fill="none" stroke="#3fbe83" stroke-width="6.5" stroke-linecap="round" marker-end="url(#arrow)" opacity=".9"/>
+
+  <g transform="translate(78 230)" filter="url(#shadow)">
+    <rect x="0" y="0" width="318" height="418" rx="26" fill="#fffdf7" stroke="#2b2722" stroke-width="3.4"/>
+    <circle cx="158" cy="96" r="68" fill="url(#bot)" stroke="#2b2722" stroke-width="3.6"/>
+    <rect x="104" y="70" width="108" height="58" rx="24" fill="#243047" stroke="#2b2722" stroke-width="3"/>
+    <circle cx="136" cy="98" r="10" fill="#7be7f4"/>
+    <circle cx="180" cy="98" r="10" fill="#7be7f4"/>
+    <path d="M140 116 Q158 130 178 116" fill="none" stroke="#7be7f4" stroke-width="5.5" stroke-linecap="round"/>
+    <path class="thin" d="M158 28 V8"/>
+    <circle cx="158" cy="2" r="12" fill="#9af2b8" stroke="#2b2722" stroke-width="3"/>
+    <text class="step" x="32" y="202">1. 飞书里发一句话</text>
+    <rect x="32" y="232" width="240" height="52" rx="16" fill="#dbeafe" stroke="#2b2722" stroke-width="2.8"/>
+    <text class="code" x="54" y="265">/cd demo-project</text>
+    <rect x="32" y="304" width="254" height="72" rx="16" fill="#e7f7ee" stroke="#2b2722" stroke-width="2.8"/>
+    <text class="body" x="54" y="336">画一张架构图</text>
+    <text class="small" x="54" y="362">图片要发回飞书</text>
+  </g>
+
+  <g transform="translate(448 230)" filter="url(#shadow)">
+    <rect x="0" y="0" width="318" height="418" rx="26" fill="#fff8c7" stroke="#2b2722" stroke-width="3.4"/>
+    <path class="outline" d="M76 102 L128 58 H230 L282 102 V208 H76 Z" fill="#fff3a3"/>
+    <path class="outline" d="M98 102 H260"/>
+    <path class="thin" d="M128 58 L138 102 M230 58 L220 102"/>
+    <circle cx="180" cy="152" r="40" fill="#ffd76f" stroke="#2b2722" stroke-width="3.2"/>
+    <path class="thin" d="M160 140 h42 M160 156 h42 M160 172 h26"/>
+    <text class="step" x="32" y="244">2. 本地 bridge 接住</text>
+    <text class="body" x="32" y="282">飞书长连接事件</text>
+    <rect x="32" y="312" width="254" height="48" rx="15" fill="#ffffff" stroke="#2b2722" stroke-width="2.8"/>
+    <text class="small" x="54" y="343">不用公网 callback</text>
+  </g>
+
+  <g transform="translate(818 230)" filter="url(#shadow)">
+    <rect x="0" y="0" width="318" height="418" rx="26" fill="#f7f0ff" stroke="#2b2722" stroke-width="3.4"/>
+    <rect x="38" y="58" width="64" height="92" rx="12" fill="#fff" stroke="#2b2722" stroke-width="3"/>
+    <rect x="124" y="58" width="64" height="92" rx="12" fill="#dff7ff" stroke="#2b2722" stroke-width="3"/>
+    <rect x="210" y="58" width="64" height="92" rx="12" fill="#fff0f3" stroke="#2b2722" stroke-width="3"/>
+    <path class="thin" d="M54 92 h30 M54 116 h30 M140 92 h30 M140 116 h30 M226 92 h30 M226 116 h30"/>
+    <path class="outline" d="M44 190 H274 L236 286 H82 Z" fill="#dec9ff"/>
+    <path d="M78 208 Q154 244 240 210" fill="none" stroke="#fff" stroke-width="10" opacity=".58"/>
+    <path class="thin" d="M118 324 C144 296 198 296 224 324 C198 356 144 356 118 324Z" fill="#ffb4c8"/>
+    <text class="step" x="32" y="382">3. 恢复 thread_id</text>
+    <text class="small" x="32" y="406">后续消息继续同一上下文</text>
+  </g>
+
+  <g transform="translate(1188 230)" filter="url(#shadow)">
+    <rect x="0" y="0" width="318" height="418" rx="26" fill="#effaf3" stroke="#2b2722" stroke-width="3.4"/>
+    <circle cx="160" cy="114" r="76" fill="url(#bot)" stroke="#2b2722" stroke-width="3.6"/>
+    <rect x="98" y="82" width="124" height="64" rx="25" fill="#253047" stroke="#2b2722" stroke-width="3"/>
+    <circle cx="134" cy="112" r="13" fill="#fff176"/>
+    <circle cx="186" cy="112" r="13" fill="#fff176"/>
+    <path d="M136 132 Q160 150 184 132" fill="none" stroke="#fff176" stroke-width="6.5" stroke-linecap="round"/>
+    <rect x="104" y="28" width="116" height="46" rx="22" fill="#ffd6e7" stroke="#2b2722" stroke-width="3"/>
+    <rect x="124" y="42" width="24" height="22" rx="5" fill="#b7e4ff" stroke="#2b2722" stroke-width="2.4"/>
+    <rect x="162" y="42" width="24" height="22" rx="5" fill="#fff" stroke="#2b2722" stroke-width="2.4"/>
+    <text class="step" x="32" y="244">4. 结果回到飞书</text>
+    <rect x="32" y="276" width="254" height="56" rx="16" fill="#fffdf2" stroke="#2b2722" stroke-width="2.8"/>
+    <text class="body" x="56" y="313">文本 / 富文本 / 图片</text>
+    <rect x="32" y="350" width="254" height="40" rx="14" fill="#dbeafe" stroke="#2b2722" stroke-width="2.8"/>
+    <text class="small" x="56" y="376">直接在聊天窗口看</text>
+  </g>
+
+  <g transform="translate(260 724)" filter="url(#shadow)">
+    <rect x="0" y="0" width="1080" height="78" rx="24" fill="#ffffff" stroke="#2b2722" stroke-width="3"/>
+    <text class="step" x="38" y="50">落地重点</text>
+    <rect x="182" y="16" width="210" height="46" rx="16" fill="#e0f2fe" stroke="#2b2722" stroke-width="2.5"/>
+    <text class="body" x="218" y="47">目录边界</text>
+    <rect x="442" y="16" width="210" height="46" rx="16" fill="#e7f7ee" stroke="#2b2722" stroke-width="2.5"/>
+    <text class="body" x="478" y="47">上下文续接</text>
+    <rect x="702" y="16" width="244" height="46" rx="16" fill="#fff0f3" stroke="#2b2722" stroke-width="2.5"/>
+    <text class="body" x="740" y="47">图片自动回传</text>
+  </g>
+</svg>

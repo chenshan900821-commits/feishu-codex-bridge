@@ -1,0 +1,26 @@
+{
+  "name": "feishu-codex-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local Feishu Bot long-connection bridge for Codex CLI.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "check": "node --check src/index.js",
+    "doctor": "node scripts/doctor.js",
+    "build:wechat": "node scripts/build-wechat-html.js"
+  },
+  "dependencies": {
+    "@larksuiteoapi/node-sdk": "1.65.0",
+    "dotenv": "^17.4.2"
+  },
+  "optionalDependencies": {
+    "node-pty": "^1.1.0"
+  },
+  "overrides": {
+    "axios": "1.15.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

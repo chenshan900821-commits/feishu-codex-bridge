@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="780" viewBox="0 0 1400 780" role="img" aria-labelledby="title desc">
+  <title id="title">Feishu usage screenshot redraw</title>
+  <desc id="desc">A privacy-safe redraw of the Feishu Bot usage flow showing cd, Codex context continuation, and generated image reply.</desc>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#1d2939" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .time { font: 400 18px "Segoe UI", Arial, sans-serif; fill:#98a2b3; }
+      .msg { font: 500 24px "Segoe UI", Arial, sans-serif; fill:#344054; }
+      .small { font: 500 19px "Segoe UI", Arial, sans-serif; fill:#667085; }
+      .name { font: 700 20px "Segoe UI", Arial, sans-serif; fill:#101828; }
+    </style>
+  </defs>
+  <rect width="1400" height="780" fill="#f5f7fb"/>
+  <rect x="0" y="0" width="1400" height="72" fill="#ffffff"/>
+  <text x="48" y="45" style="font:700 25px 'Segoe UI',Arial,sans-serif;fill:#101828">cc 机器人对话</text>
+  <text x="1190" y="45" class="time">Feishu</text>
+
+  <circle cx="78" cy="138" r="30" fill="#8bc34a"/>
+  <rect x="130" y="105" width="220" height="68" rx="16" fill="#dbeafe"/>
+  <text x="158" y="148" class="msg">/cd demo-project</text>
+
+  <circle cx="78" cy="245" r="30" fill="#eef2ff"/>
+  <text x="64" y="255" style="font:700 26px 'Segoe UI',Arial,sans-serif;fill:#3370ff">cc</text>
+  <rect x="130" y="210" width="640" height="88" rx="16" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="158" y="248" class="msg">Codex cwd changed:</text>
+  <text x="158" y="278" class="small">PROJECT_ROOT\demo-project</text>
+
+  <circle cx="78" cy="370" r="30" fill="#8bc34a"/>
+  <rect x="130" y="326" width="720" height="88" rx="16" fill="#dbeafe"/>
+  <text x="158" y="362" class="msg">画一张当前 multi-agent 架构图</text>
+  <text x="158" y="392" class="small">以及整个系统的架构图，图片要发回来</text>
+
+  <circle cx="78" cy="500" r="30" fill="#eef2ff"/>
+  <text x="64" y="510" style="font:700 26px 'Segoe UI',Arial,sans-serif;fill:#3370ff">cc</text>
+  <rect x="130" y="462" width="520" height="76" rx="16" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="158" y="507" class="msg">Codex 已收到，继续当前上下文。</text>
+
+  <rect x="130" y="575" width="760" height="128" rx="16" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="158" y="616" class="name">Generated image:</text>
+  <rect x="158" y="638" width="310" height="42" rx="12" fill="#eef7f3"/>
+  <text x="178" y="666" class="small">docs/architecture.png</text>
+  <rect x="508" y="610" width="310" height="72" rx="12" fill="#172033"/>
+  <path d="M540 653 L610 625 L680 662 L742 630 L798 654" stroke="#31c48d" stroke-width="8" fill="none" stroke-linecap="round"/>
+</svg>

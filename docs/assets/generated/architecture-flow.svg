@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">从飞书消息到 Codex 工作流</title>
+  <desc id="desc">A structured hand-drawn architecture diagram for Feishu long-connection events, local Node bridge, Codex exec, session state, image scanning, and replies.</desc>
+  <defs>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#eadfc9" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="7" flood-color="#5b4b38" flood-opacity=".14"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Q4 6 1 1" fill="#5ba6d8" stroke="#2f2b25" stroke-width="1.25"/>
+    </marker>
+    <style>
+      .title { font:900 56px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; letter-spacing:0; }
+      .h { font:800 24px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; fill:#2f2b25; }
+      .p { font:600 18px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; fill:#5c564d; }
+      .small { font:600 15px "Microsoft YaHei","PingFang SC","Segoe UI",Arial,sans-serif; fill:#6d6459; }
+      .code { font:700 17px "Cascadia Mono",Consolas,monospace; fill:#344054; }
+      .outline { stroke:#2f2b25; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+      .thin { stroke:#2f2b25; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#fbf1dc"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity=".5"/>
+  <path d="M46 48 H1550 V852 H46 Z" fill="none" stroke="#e1cfad" stroke-width="5"/>
+
+  <text x="86" y="96" class="title">
+    <tspan fill="#ff6b6b">从飞书消息</tspan>
+    <tspan fill="#2ec4b6"> 到 Codex 工作流</tspan>
+  </text>
+  <text x="90" y="142" class="p">默认 exec 模式：短进程执行，thread_id 续上下文；输出整理成文本、富文本和图片。</text>
+
+  <g transform="translate(78 228)" filter="url(#shadow)">
+    <rect class="outline" x="0" y="0" width="286" height="196" rx="22" fill="#dbeafe"/>
+    <circle cx="54" cy="58" r="30" fill="#8bc34a" stroke="#2f2b25" stroke-width="3"/>
+    <rect x="102" y="36" width="140" height="48" rx="14" fill="#fff" stroke="#2f2b25" stroke-width="2.6"/>
+    <text x="120" y="67" class="code">/cd project</text>
+    <text x="30" y="132" class="h">飞书 Bot</text>
+    <text x="30" y="164" class="p">命令 + 普通提示词</text>
+  </g>
+
+  <g transform="translate(426 228)" filter="url(#shadow)">
+    <path class="outline" d="M24 12 H278 Q302 12 302 36 V172 Q302 196 278 196 H0 Q-24 196 -20 170 L4 36 Q8 12 24 12Z" fill="#fff9c8"/>
+    <text x="28" y="62" class="h">长连接事件</text>
+    <text x="28" y="98" class="p">不用公网 callback</text>
+    <text x="28" y="130" class="p">订阅 message + menu</text>
+    <path class="thin" d="M244 64 q24 18 0 36 q-24 18 0 36" fill="none"/>
+    <circle cx="268" cy="66" r="7" fill="#ff6b6b"/>
+    <circle cx="268" cy="102" r="7" fill="#2ec4b6"/>
+    <circle cx="268" cy="138" r="7" fill="#4d96ff"/>
+  </g>
+
+  <g transform="translate(786 228)" filter="url(#shadow)">
+    <rect class="outline" x="0" y="0" width="344" height="196" rx="22" fill="#ffffff"/>
+    <text x="30" y="58" class="h">本地 Node Bridge</text>
+    <rect x="30" y="86" width="124" height="46" rx="14" fill="#e7f7ee" stroke="#2f2b25" stroke-width="2.6"/>
+    <text x="72" y="116" class="p">权限</text>
+    <rect x="180" y="86" width="124" height="46" rx="14" fill="#e0f2fe" stroke="#2f2b25" stroke-width="2.6"/>
+    <text x="222" y="116" class="p">目录</text>
+    <text x="30" y="162" class="code">cwd + thread_id</text>
+  </g>
+
+  <g transform="translate(1232 228)" filter="url(#shadow)">
+    <path class="outline" d="M36 0 H260 Q292 0 302 34 L336 162 Q346 196 312 206 H20 Q-14 196 -6 162 L26 34 Q34 0 36 0Z" fill="#1f2937"/>
+    <text x="50" y="58" style="font:800 26px 'Microsoft YaHei','Segoe UI',Arial,sans-serif;fill:#fff">Codex CLI</text>
+    <rect x="48" y="88" width="244" height="44" rx="12" fill="#f8fafc" stroke="#2f2b25" stroke-width="2.6"/>
+    <text x="68" y="116" class="code">codex exec --json</text>
+    <rect x="48" y="148" width="244" height="44" rx="12" fill="#f8fafc" stroke="#2f2b25" stroke-width="2.6"/>
+    <text x="68" y="176" class="code">exec resume id</text>
+  </g>
+
+  <path d="M370 326 C392 326 404 326 426 326" fill="none" stroke="#5ba6d8" stroke-width="5" marker-end="url(#arrow)"/>
+  <path d="M730 326 C752 326 764 326 786 326" fill="none" stroke="#5ba6d8" stroke-width="5" marker-end="url(#arrow)"/>
+  <path d="M1138 326 C1172 326 1192 326 1224 326" fill="none" stroke="#5ba6d8" stroke-width="5" marker-end="url(#arrow)"/>
+
+  <g transform="translate(138 570)" filter="url(#shadow)">
+    <rect class="outline" x="0" y="0" width="342" height="174" rx="22" fill="#ffffff"/>
+    <text x="30" y="58" class="h">首次消息</text>
+    <text x="30" y="96" class="code">codex exec -C project</text>
+    <text x="30" y="132" class="p">拿到 thread_id 并保存</text>
+  </g>
+
+  <g transform="translate(622 570)" filter="url(#shadow)">
+    <rect class="outline" x="0" y="0" width="390" height="174" rx="22" fill="#eee0ff"/>
+    <text x="30" y="58" class="h">后续消息</text>
+    <text x="30" y="96" class="code">codex exec resume &lt;thread_id&gt;</text>
+    <text x="30" y="132" class="p">进程重启，上下文继续</text>
+  </g>
+
+  <g transform="translate(1138 570)" filter="url(#shadow)">
+    <rect class="outline" x="0" y="0" width="356" height="174" rx="22" fill="#e7f7ee"/>
+    <text x="30" y="58" class="h">回传到飞书</text>
+    <rect x="30" y="86" width="78" height="48" rx="12" fill="#fff" stroke="#2f2b25" stroke-width="2.4"/>
+    <text x="52" y="117" class="p">文本</text>
+    <rect x="126" y="86" width="78" height="48" rx="12" fill="#fff" stroke="#2f2b25" stroke-width="2.4"/>
+    <text x="148" y="117" class="p">富文</text>
+    <rect x="222" y="86" width="78" height="48" rx="12" fill="#fff" stroke="#2f2b25" stroke-width="2.4"/>
+    <path d="M242 120 l26-30 24 30z" fill="#111827"/>
+    <circle cx="284" cy="94" r="8" fill="#ffd166" stroke="#2f2b25" stroke-width="2"/>
+  </g>
+
+  <path d="M786 424 C706 500 502 500 338 562" fill="none" stroke="#43bf84" stroke-width="5.2" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M960 424 C922 482 892 514 834 562" fill="none" stroke="#5ba6d8" stroke-width="5.2" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M1012 656 C1060 656 1088 656 1138 656" fill="none" stroke="#5ba6d8" stroke-width="5.2" marker-end="url(#arrow)"/>
+  <path d="M1310 570 C1260 496 1196 458 1116 424" fill="none" stroke="#ffb000" stroke-width="5.2" stroke-linecap="round"/>
+
+  <text x="94" y="806" class="small">边界：只允许切到 CODEX_ROOT 下的目录；敏感配置放在 .env，不提交到仓库。</text>
+</svg>
