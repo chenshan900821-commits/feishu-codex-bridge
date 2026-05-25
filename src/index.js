@@ -12,6 +12,11 @@ const {
   formatCodexFailure,
   sanitizeCodexStderr,
 } = require('./codex-output');
+const {
+  attachmentExtensionFromHeaders,
+  buildAttachmentPath,
+  extractImageKey,
+} = require('./feishu-images');
 
 let pty = null;
 try {
@@ -170,8 +175,13 @@ async function handleMessageEvent(data) {
     return;
   }
 
+  if (message.message_type === 'image') {
+    await handleImageMessage(sessionKey, chatId, message);
+    return;
+  }
+
   if (message.message_type !== 'text') {
-    await sendText(chatId, '暂时只支持文本消息。');
+    await sendText(chatId, '暂时只支持文本消息和图片消息。');
     return;
   }
 
@@ -188,6 +198,30 @@ async function handleMessageEvent(data) {
 
   const session = ensureSession(sessionKey, chatId, { resumeLast: false });
   session.writeUserText(text);
+}
+
+async function handleImageMessage(sessionKey, chatId, message) {
+  const imageKey = extractImageKey(message.content);
+  if (!imageKey) {
+    await sendText(chatId, '收到图片消息，但没有找到 image_key，无法下载给 Codex。');
+    return;
+  }
+
+  let imagePath;
+  try {
+    imagePath = await downloadFeishuMessageImage({
+      messageId: message.message_id,
+      imageKey,
+      cwd: getSelectedCwd(sessionKey),
+    });
+  } catch (error) {
+    log('warn', `failed to download inbound Feishu image: ${error.message}`);
+    await sendText(chatId, `图片下载失败，暂时不能交给 Codex：${error.message}`);
+    return;
+  }
+
+  const session = ensureSession(sessionKey, chatId, { resumeLast: false });
+  session.writeUserText(inboundImagePrompt(), [imagePath]);
 }
 
 async function handleMenuEvent(data) {
@@ -467,8 +501,12 @@ class PtyCodexSession {
     this.touch();
   }
 
-  writeUserText(text) {
+  writeUserText(text, imagePaths = []) {
     if (!this.running || !this.proc) {
+      return;
+    }
+    if (imagePaths.length) {
+      void sendText(this.chatId, '图片输入暂时只支持 CODEX_TRANSPORT=exec。当前是 pty 模式，请切回 exec 后重试。');
       return;
     }
     this.touch();
@@ -569,7 +607,7 @@ class ExecCodexSession {
     this.touch();
   }
 
-  writeUserText(text) {
+  writeUserText(text, imagePaths = []) {
     if (this.stopped) {
       return;
     }
@@ -579,13 +617,13 @@ class ExecCodexSession {
     }
 
     this.touch();
-    this.runPrompt(text).catch((error) => {
+    this.runPrompt(text, imagePaths).catch((error) => {
       this.currentProc = null;
       void sendText(this.chatId, `Codex 执行失败：${error.message}`);
     });
   }
 
-  async runPrompt(prompt) {
+  async runPrompt(prompt, imagePaths = []) {
     const outputFile = path.join(
       os.tmpdir(),
       `feishu-codex-${Date.now()}-${Math.random().toString(16).slice(2)}.txt`,
@@ -595,6 +633,7 @@ class ExecCodexSession {
       sessionId: this.sessionId,
       resumeLast: this.resumeLast && !this.sessionId,
       cwd: this.cwd,
+      imagePaths,
     });
 
     log('info', `running codex exec for chat=${this.chatId}, cwd=${this.cwd}: ${config.codexCommand} ${args.join(' ')}`);
@@ -699,7 +738,7 @@ class ExecCodexSessionV2 {
     this.touch();
   }
 
-  writeUserText(text) {
+  writeUserText(text, imagePaths = []) {
     if (this.stopped) {
       return;
     }
@@ -712,14 +751,14 @@ class ExecCodexSessionV2 {
     }
 
     this.touch();
-    this.runPrompt(text).catch((error) => {
+    this.runPrompt(text, imagePaths).catch((error) => {
       this.currentProc = null;
       this.clearTimers();
       void sendText(this.chatId, `Codex failed: ${error.message}`);
     });
   }
 
-  async runPrompt(prompt) {
+  async runPrompt(prompt, imagePaths = []) {
     const outputFile = path.join(
       os.tmpdir(),
       `feishu-codex-${Date.now()}-${Math.random().toString(16).slice(2)}.txt`,
@@ -729,6 +768,7 @@ class ExecCodexSessionV2 {
       sessionId: this.sessionId,
       resumeLast: this.resumeLast && !this.sessionId,
       cwd: this.cwd,
+      imagePaths,
     });
 
     log('info', `running codex exec v2 for chat=${this.chatId}, cwd=${this.cwd}: ${config.codexCommand} ${args.join(' ')}`);
@@ -996,12 +1036,13 @@ function buildCodexPtyArgs({ resumeLast, cwd }) {
   return args;
 }
 
-function buildCodexExecArgs({ outputFile, sessionId, resumeLast, cwd }) {
+function buildCodexExecArgs({ outputFile, sessionId, resumeLast, cwd, imagePaths = [] }) {
   if (sessionId || resumeLast) {
     const args = ['exec', 'resume', '--json', '-o', outputFile];
     if (config.codexModel) {
       args.push('-m', config.codexModel);
     }
+    appendImageArgs(args, imagePaths);
     if (sessionId) {
       args.push(sessionId);
     } else {
@@ -1022,8 +1063,17 @@ function buildCodexExecArgs({ outputFile, sessionId, resumeLast, cwd }) {
     args.push('-s', config.codexSandbox);
   }
   args.push(...config.codexExtraArgs);
+  appendImageArgs(args, imagePaths);
   args.push('-');
   return args;
+}
+
+function appendImageArgs(args, imagePaths) {
+  for (const imagePath of imagePaths || []) {
+    if (imagePath) {
+      args.push('--image', imagePath);
+    }
+  }
 }
 
 function getSelectedCwd(sessionKey) {
@@ -1162,7 +1212,7 @@ function findNewImages(root, baseline) {
 function listImages(root) {
   const results = [];
   const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp']);
-  const skipDirs = new Set(['.git', 'node_modules', '.next', 'dist', 'build', '.cache', '.wrangler']);
+  const skipDirs = new Set(['.git', 'node_modules', '.next', 'dist', 'build', '.cache', '.wrangler', '.codex-inbox']);
   const resolvedRoot = path.resolve(root);
 
   const walk = (dir, depth) => {
@@ -1241,6 +1291,7 @@ function helpText() {
     '/stop - stop the current Codex process',
     '',
     'Plain text after selecting a directory is sent to Codex.',
+    'Image messages are downloaded locally and attached to Codex with --image.',
   ].join('\n');
 }
 
@@ -1358,6 +1409,49 @@ async function sendImage(chatId, imagePath) {
     log('warn', `failed to send image ${imagePath}: ${error.message}`);
     await sendText(chatId, `Generated image exists, but upload failed:\n${imagePath}\n${error.message}`);
   }
+}
+
+async function downloadFeishuMessageImage({ messageId, imageKey, cwd }) {
+  const resourceApi = client.im && client.im.v1 && client.im.v1.messageResource;
+  if (!resourceApi || !resourceApi.get) {
+    throw new Error('current Feishu SDK does not expose im.v1.messageResource.get');
+  }
+
+  const resource = await resourceApi.get({
+    path: {
+      message_id: messageId,
+      file_key: imageKey,
+    },
+    params: {
+      type: 'image',
+    },
+  });
+
+  const extension = attachmentExtensionFromHeaders(resource.headers);
+  const filePath = buildAttachmentPath({ cwd, messageId, imageKey, extension });
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  await resource.writeFile(filePath);
+
+  const stat = fs.statSync(filePath);
+  if (stat.size <= 0) {
+    removeIfExists(filePath);
+    throw new Error('downloaded image is empty');
+  }
+  if (stat.size > config.maxImageBytes) {
+    removeIfExists(filePath);
+    throw new Error(`image is larger than MAX_IMAGE_MB (${Math.round(stat.size / 1024 / 1024)} MB)`);
+  }
+
+  log('info', `downloaded Feishu image message=${messageId}, bytes=${stat.size}`);
+  return filePath;
+}
+
+function inboundImagePrompt() {
+  return [
+    '请分析这张从飞书收到的图片。',
+    '先概括图片内容；如果图片里有界面、报错、代码、架构图或配置页，请指出关键信息、可能的问题和下一步建议。',
+    '只基于图片可见内容回答，不要猜测看不到的隐私信息。',
+  ].join('\n');
 }
 
 async function createFeishuMessage(payload) {

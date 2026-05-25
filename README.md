@@ -20,6 +20,7 @@ The bridge runs on the same machine where your projects and Codex CLI already li
 - Supports allow-listing by Feishu user or chat id.
 - Sends long answers as richer Feishu post messages.
 - Uploads generated images back to Feishu.
+- Downloads inbound Feishu image messages and attaches them to Codex CLI with `--image`.
 - Includes Windows and macOS/Linux install/start/stop scripts.
 - Includes [AGENTS.md](AGENTS.md) so another agent can install and deploy it without guessing.
 
@@ -185,6 +186,8 @@ AUTO_SEND_IMAGES=true
 MAX_IMAGES_PER_RUN=5
 MAX_IMAGE_MB=10
 ```
+
+Inbound image messages are supported in `CODEX_TRANSPORT=exec`. When a user sends an image to the Bot, the bridge downloads the message resource into `.codex-inbox/feishu-images/` under the selected Codex working directory, then calls Codex with `--image <file>`.
 
 ## Bot Menu
 

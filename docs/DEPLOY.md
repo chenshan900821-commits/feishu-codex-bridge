@@ -147,6 +147,8 @@ This is more reliable for a chat bot than keeping a terminal UI process alive, b
 
 If Codex creates or modifies images under the current working directory, the bridge uploads them to Feishu and sends image messages.
 
+Inbound Feishu image messages are also supported in the default `CODEX_TRANSPORT=exec` mode. The bridge downloads the message image resource into `.codex-inbox/feishu-images/` under the selected Codex working directory, then passes it to Codex CLI with `--image`.
+
 Relevant config:
 
 ```env

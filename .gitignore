@@ -5,3 +5,4 @@ bridge.pid
 npm-debug.log*
 *.log
 .DS_Store
+.codex-inbox/
