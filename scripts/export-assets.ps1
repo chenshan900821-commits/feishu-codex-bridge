@@ -18,6 +18,7 @@ $Items = @(
   @{ In = "docs\assets\generated\hero-bridge.svg"; Out = "docs\assets\generated\hero-bridge.png"; Size = "1600,900" },
   @{ In = "docs\assets\generated\architecture-flow.svg"; Out = "docs\assets\generated\architecture-flow.png"; Size = "1600,900" },
   @{ In = "docs\assets\screenshots\feishu-usage-redraw.svg"; Out = "docs\assets\screenshots\feishu-usage-redraw.png"; Size = "1400,780" },
+  @{ In = "docs\assets\screenshots\feishu-menu-config-redraw.svg"; Out = "docs\assets\screenshots\feishu-menu-config-redraw.png"; Size = "1400,780" },
   @{ In = "docs\assets\screenshots\github-repo-redraw.svg"; Out = "docs\assets\screenshots\github-repo-redraw.png"; Size = "1400,780" }
 )
 

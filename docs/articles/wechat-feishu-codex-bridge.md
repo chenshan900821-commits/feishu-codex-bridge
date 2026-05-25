@@ -43,6 +43,52 @@ https://github.com/chenshan900821-commits/feishu-codex-bridge
 
 ![Feishu Codex Bridge 架构图](../assets/generated/architecture-flow.png)
 
+## 飞书开放平台怎么配
+
+飞书侧的配置主要分四块：机器人能力、长连接事件、权限、机器人菜单。
+
+第一步，在飞书开放平台进入自建应用的 `凭证与基础信息`，拿到 `App ID` 和 `App Secret`。这两个值只写进本地 `.env`，不要写进文章、README 或 GitHub。
+
+第二步，在 `添加应用能力` 里开启机器人，然后进入 `事件与回调`，把事件订阅方式改成 `使用长连接接收事件`。这样本地程序主动连飞书，不需要公网 callback URL。
+
+需要订阅两个事件：
+
+```text
+im.message.receive_v1
+application.bot.menu_v6
+```
+
+`im.message.receive_v1` 用来接收用户发给机器人的消息；`application.bot.menu_v6` 用来接收机器人菜单点击事件。
+
+第三步，在 `权限管理` 里开这些权限：
+
+```text
+读取用户发给机器人的单聊消息
+接收群聊中 @ 机器人消息事件
+以机器人身份发送消息
+获取与上传图片或文件资源
+```
+
+最后一个权限很关键。Codex 生成图片后，bridge 会先把图片上传到飞书，再用图片消息发回聊天窗口。
+
+第四步，配置机器人自定义菜单。菜单项不要选跳转链接，选择 `推送事件`，然后给每个菜单填一个事件 ID。
+
+我现在用的是这组：
+
+```text
+帮助        -> help
+Codex 怎么用 -> codex_guide
+常用提示词    -> examples
+项目目录      -> dirs
+状态          -> status
+```
+
+下面这张图是根据实际配置页重绘的示意图，隐藏了组织、头像和账号信息：
+
+![飞书机器人菜单配置截图重绘版](../assets/screenshots/feishu-menu-config-redraw.png)
+
+权限、事件、菜单改完之后，一定要去 `版本管理与发布` 发布新版本。飞书一般会在发布后几分钟生效。
+
 ## 核心设计：短进程，但长上下文
 
 最容易踩坑的是 Codex CLI 的运行方式。
@@ -239,7 +285,8 @@ docs/DEPLOY.md
 docs/assets/generated/hero-bridge.png
 docs/assets/generated/architecture-flow.png
 docs/assets/screenshots/feishu-usage-redraw.png
+docs/assets/screenshots/feishu-menu-config-redraw.png
 docs/assets/screenshots/github-repo-redraw.png
 ```
 
-其中两张截图是基于真实操作路径做的隐私安全重绘版。正式发布时，如果你希望更强的“现场感”，可以把真实飞书截图另存后替换同名 PNG，正文不用改。SVG 源文件也保留在同目录，后续要改文案或尺寸可以继续编辑。
+其中截图都是基于真实操作路径做的隐私安全重绘版。正式发布时，如果你希望更强的“现场感”，可以把真实飞书截图另存后替换同名 PNG，正文不用改。SVG 源文件也保留在同目录，后续要改文案或尺寸可以继续编辑。
